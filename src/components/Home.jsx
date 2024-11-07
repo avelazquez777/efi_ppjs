@@ -1,16 +1,23 @@
-import { Fragment } from "react"
-const Home = () => {
+import { Fragment } from "react";
+import { Link } from "react-router-dom"; // Para enlazar a otras páginas
 
+const Home = () => {
     return (
         <Fragment>
-            <h1>Inicio del proyecto</h1>
-            <h1>Vite + React</h1>
-            <p className="read-the-docs">
-                Click on the Vite and React logos to learn more
-            </p>
-        </Fragment>
-    )
+            <h1>Bienvenido al Sistema de Gestión</h1>
+            <h3>Gestiona tus usuarios y fabricantes fácilmente</h3>
+            <p>Este sistema te permite agregar, ver y administrar usuarios y fabricantes en tu plataforma.</p>
 
+            <div>
+                <h4>Comienza por:</h4>
+                <ul>
+                    <li><Link to="/usuarios">Gestionar Usuarios</Link></li>
+                    <li><Link to="/fabricantes">Ver Fabricantes</Link></li>
+                    <li><Link to="/nuevo-fabricante">Crear Nuevo Fabricante</Link></li>
+                </ul>
+            </div>
+        </Fragment>
+    );
 }
 
-export default Home
+export default Home;
