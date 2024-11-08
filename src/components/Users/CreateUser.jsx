@@ -1,7 +1,14 @@
-import React, { useState } from 'react';
+import { useState, useEffect, useRef } from "react";
+import UsersView from "./UsersView";
+import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
+import { Toast } from "primereact/toast";
+import "primereact/resources/themes/lara-light-indigo/theme.css"; // Tema de PrimeReact
+import "primereact/resources/primereact.min.css"; // Estilos de PrimeReact
+import "primeicons/primeicons.css"; // Íconos de PrimeReact
 
 const CreateUser = () => {
-  const [username, setUsername] = useState('');
+
+  const [username, setUsername] = useState('');  // Cambié 'usuario' a 'username'
   const [password, setPassword] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
   const [error, setError] = useState('');
@@ -13,6 +20,7 @@ const CreateUser = () => {
 
     // Obtener el token JWT desde el almacenamiento local (o desde donde lo tengas guardado)
     const token = localStorage.getItem('token');
+    console.log(token)
     if (!token) {
       setError('No se ha encontrado un token válido');
       return;
@@ -20,7 +28,7 @@ const CreateUser = () => {
 
     // Crear el objeto de datos que se enviará al backend
     const userData = {
-      username,
+      username: username,  // Cambié 'usuario' por 'username'
       password,
       is_admin: isAdmin,
     };
@@ -67,8 +75,8 @@ const CreateUser = () => {
           <label>Username:</label>
           <input
             type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={username}  // Cambié 'usuario' por 'username'
+            onChange={(e) => setUsername(e.target.value)}  // Cambié 'setUsuario' por 'setUsername'
             required
           />
         </div>
@@ -99,4 +107,3 @@ const CreateUser = () => {
 };
 
 export default CreateUser;
-
