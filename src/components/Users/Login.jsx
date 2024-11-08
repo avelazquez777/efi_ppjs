@@ -58,7 +58,7 @@ const VerificarLogin = () => {
             style={{ display: 'block', width: '100%', padding: '10px', margin: '10px 0' }} // Aplicando estilos en línea
           />
         </div>
-        <button type="submit" className="btn btn-primary">Iniciar Sesión</button>
+        <button type="submit" className="p-button font-bold">Iniciar Sesión</button>
       </form>
       {message && <div className="alert alert-info mt-3">{message}</div>}
     </div>

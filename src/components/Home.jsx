@@ -12,8 +12,8 @@ const Home = () => {
                 <h4>Comienza por:</h4>
                 <ul>
                     <li><Link to="/usuarios">Gestionar Usuarios</Link></li>
-                    <li><Link to="/fabricantes">Ver Fabricantes</Link></li>
-                    <li><Link to="/nuevo-fabricante">Crear Nuevo Fabricante</Link></li>
+                    <li><Link to="/Pais">Ver Paises</Link></li>
+                    <li><Link to="/nuevo-pais">Crear Nuevo Pais</Link></li>
                 </ul>
             </div>
         </Fragment>
