@@ -4,8 +4,8 @@ import { Menubar } from "primereact/menubar";
 import Home from "./components/Home";
 import CreateUser from "./components/Users/CreateUser";
 import VerificarLogin from "./components/Users/Login";
-import FabricanteView from "./components/Fabricantes/FabricanteView"; // Vista de fabricantes
-import CreateFabricante from "./components/Fabricantes/CreateFabricante"; // Crear fabricante
+import PaisView from "./components/Paises/PaisView"; // Vista de Paiss
+import CreatePais from "./components/Paises/CreatePais"; // Crear Pais
 import "./App.css";
 
 function App() {
@@ -13,8 +13,8 @@ function App() {
     { label: "Inicio", icon: "pi pi-home", url: "/" },
     { label: "Usuarios", icon: "pi pi-users", url: "/usuarios" },
     { label: "Nuevo usuario", icon: "pi pi-user-plus", url: "/nuevo-usuario" },
-    { label: "Fabricantes", icon: "pi pi-briefcase", url: "/fabricantes" }, // Ruta para ver fabricantes
-    { label: "Nuevo fabricante", icon: "pi pi-plus-circle", url: "/nuevo-fabricante" }, // Ruta para crear fabricante
+    { label: "Paiss", icon: "pi pi-briefcase", url: "/Paises" }, // Ruta para ver Paiss
+    { label: "Nuevo Pais", icon: "pi pi-plus-circle", url: "/nuevo-Pais" }, // Ruta para crear Pais
     { label: "Login", icon: "pi pi-sign-in", url: "/login" }, 
   ];
 
@@ -24,8 +24,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/nuevo-usuario" element={<CreateUser />} />
-        <Route path="/fabricantes" element={<FabricanteView />} /> {/* Vista de fabricantes */}
-        <Route path="/nuevo-fabricante" element={<CreateFabricante />} /> {/* Crear nuevo fabricante */}
+        <Route path="/Paises" element={<PaisView />} /> {/* Vista de Paiss */}
+        <Route path="/nuevo-pais" element={<CreatePais />} /> {/* Crear nuevo fabricante */}
         <Route path="/login" element={<VerificarLogin />} /> 
       </Routes>
     </BrowserRouter>

@@ -8,7 +8,7 @@ import "primeicons/primeicons.css"; // Íconos de PrimeReact
 
 const CreateUser = () => {
 
-  const [username, setUsername] = useState('');  // Cambié 'usuario' a 'username'
+  const [username, setUsername] = useState('');  
   const [password, setPassword] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
   const [error, setError] = useState('');
