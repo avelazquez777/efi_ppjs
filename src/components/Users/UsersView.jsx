@@ -1,84 +1,119 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Button } from 'primereact/button';
-import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
-import { Toast } from 'primereact/toast';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Button } from 'primereact/button'; // Asumo que usas PrimeReact para los botones
 
-const UsersView = () => {
-    const [users, setUsers] = useState([]); // Estado para la lista de usuarios
-    const [selectedUser, setSelectedUser] = useState(null); // Para mantener el usuario que se va a eliminar
-    const toast = useRef(null); // Ref para el Toast
+const UserView = () => {
+  const [users, setUsers] = useState([]);
+  const [isAdmin, setIsAdmin] = useState(false); // Estado para saber si es admin
+  const navigate = useNavigate();
+  const token = localStorage.getItem('token');
+  const userRole = localStorage.getItem('role'); // Suposición de que almacenas el rol de usuario
 
-    // Simulación de carga de usuarios (reemplaza con tu lógica real para obtener usuarios)
-    useEffect(() => {
-        fetchUsers();
-    }, []);
+  useEffect(() => {
+    if (!token) {
+      // Si no hay token, redirigir a login o mostrar mensaje de error
+      alert('No estás autenticado');
+      navigate('/login');
+      return;
+    }
 
     const fetchUsers = async () => {
-        // Aquí llamas a tu API para obtener la lista de usuarios
-        const response = await fetch('/api/users', {
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}` // Asegúrate de pasar el token
-            }
+      try {
+        const response = await fetch('http://127.0.0.1:5000/users', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          }
         });
+
         if (response.ok) {
-            const data = await response.json();
-            setUsers(data);
+          const data = await response.json();
+          setUsers(data); // Suponemos que la respuesta contiene los usuarios
+          if (userRole === 'admin') {
+            setIsAdmin(true); // Si es admin, habilitar las opciones
+          }
         } else {
-            toast.current.show({ severity: 'error', summary: 'Error', detail: 'No se pudieron cargar los usuarios', life: 3000 });
+          throw new Error('No se pudieron cargar los usuarios');
         }
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      }
     };
 
-    const handleDelete = (user) => {
-        setSelectedUser(user); // Guarda el usuario seleccionado para eliminar
-        confirmDialog({
-            message: '¿Estás seguro de que deseas eliminar este usuario?',
-            header: 'Confirmar eliminación',
-            icon: 'pi pi-exclamation-triangle',
-            accept: () => deleteUser(user.id), // Llama a la función deleteUser si el usuario acepta
-            reject: () => {} // No hace nada si se cancela
+    fetchUsers();
+  }, [token, userRole, navigate]);
+
+  const handleDelete = async (userId) => {
+    if (window.confirm('¿Estás seguro de que quieres eliminar este usuario?')) {
+      try {
+        const response = await fetch(`http://127.0.0.1:5000/users/${userId}/delete`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          }
         });
-    };
 
-    const deleteUser = async (userId) => {
-        try {
-            // Llamada a la API para eliminar el usuario
-            const response = await fetch(`/api/users/${userId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}` // Asegúrate de pasar el token
-                },
-            });
-
-            if (response.ok) {
-                // Aquí actualizas el estado de la lista de usuarios para reflejar la eliminación
-                setUsers(prevUsers => prevUsers.filter(user => user.id !== userId));
-                // Mostrar mensaje de éxito
-                toast.current.show({ severity: 'success', summary: 'Éxito', detail: 'Usuario eliminado correctamente', life: 3000 });
-            } else {
-                throw new Error('No se pudo eliminar el usuario');
-            }
-        } catch (error) {
-            // Mostrar mensaje de error
-            toast.current.show({ severity: 'error', summary: 'Error', detail: 'Hubo un problema al eliminar el usuario', life: 3000 });
+        if (response.ok) {
+          // Eliminar el usuario de la lista localmente
+          setUsers(users.filter(user => user.id !== userId));
+        } else {
+          alert('Error al eliminar el usuario');
         }
-    };
+      } catch (error) {
+        console.error('Error deleting user:', error);
+      }
+    }
+  };
 
-    return (
-        <div>
-            <Toast ref={toast} />
-            <h3>Lista de Usuarios</h3>
-            <ul>
-                {users.map(user => (
-                    <li key={user.id}>
-                        {user.username}
-                        <Button label="Eliminar" icon="pi pi-trash" onClick={() => handleDelete(user)} />
-                    </li>
-                ))}
-            </ul>
+  const handleEdit = (userId) => {
+    // Redirigir a la página de edición de usuario
+    navigate(`/users/edit/${userId}`);
+  };
 
-            <ConfirmDialog />
-        </div>
-    );
+  return (
+    <div>
+      <h2>Lista de Usuarios</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre de Usuario</th>
+            <th>Email</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {users.map((user) => (
+            <tr key={user.id}>
+              <td>{user.username}</td>
+              <td>{user.email}</td>
+              <td>
+                {isAdmin && (
+                  <>
+                    <Button
+                      label="Editar"
+                      icon="pi pi-pencil"
+                      className="p-button-warning p-button-sm me-2"
+                      onClick={() => handleEdit(user.id)}
+                    />
+                    <Button
+                      label="Eliminar"
+                      icon="pi pi-trash"
+                      className="p-button-danger p-button-sm"
+                      onClick={() => handleDelete(user.id)}
+                    />
+                  </>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
 };
 
-export default UsersView;
+export default UserView;
+
+

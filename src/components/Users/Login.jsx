@@ -1,15 +1,15 @@
 import { useState } from "react";
 
-const verificarLogin = () => {
+const VerificarLogin = () => {
   const [message, setMessage] = useState("");
 
-  const login = async (username, password) => {
+  const login = async (usuario, password) => {
     try {
       const response = await fetch("http://127.0.0.1:5000/login", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",  // Asegúrate de establecer el tipo de contenido
-          Authorization: "Basic " + btoa(`${username}:${password}`),  // Autenticación básica con username y password
+          "Content-Type": "application/json",
+          Authorization: "Basic " + btoa(`${usuario}:${password}`),
         },
       });
 
@@ -32,8 +32,8 @@ const verificarLogin = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    const { username, password } = e.target.elements;
-    login(username.value, password.value);
+    const { usuario, password } = e.target.elements;
+    login(usuario.value, password.value);
   };
 
   return (
@@ -41,10 +41,22 @@ const verificarLogin = () => {
       <form onSubmit={handleLogin}>
         <h4>Inicio de Sesión</h4>
         <div className="mb-3">
-          <input type="text" name="username" placeholder="Usuario" required />
+          <input
+            type="text"
+            name="usuario"
+            placeholder="Usuario"
+            required
+            style={{ display: 'block', width: '100%', padding: '10px', margin: '10px 0' }} // Aplicando estilos en línea
+          />
         </div>
         <div className="mb-3">
-          <input type="password" name="password" placeholder="Contraseña" required />
+          <input
+            type="password"
+            name="password"
+            placeholder="Contraseña"
+            required
+            style={{ display: 'block', width: '100%', padding: '10px', margin: '10px 0' }} // Aplicando estilos en línea
+          />
         </div>
         <button type="submit" className="btn btn-primary">Iniciar Sesión</button>
       </form>
@@ -53,4 +65,4 @@ const verificarLogin = () => {
   );
 };
 
-export default verificarLogin;
+export default VerificarLogin;
